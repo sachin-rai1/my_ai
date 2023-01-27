@@ -10,6 +10,7 @@ dependencies:
   chat_gpt_sdk: ^1.0.2+1
   velocity_x: ^3.6.0
   get: 4.6.5
+  image_network: 2.5.1
   flutter: 
     sdk: flutter
 

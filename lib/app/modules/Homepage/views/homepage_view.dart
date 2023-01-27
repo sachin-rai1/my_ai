@@ -10,13 +10,15 @@ class HomepageView extends GetView<HomepageController> {
 
   @override
   Widget build(BuildContext context) {
+    final _scrollController = ScrollController();
     Get.put(HomepageController());
     return Scaffold(
+      backgroundColor: Colors.black12,
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.black12,
         title: Text('CHAT-GPT',
-            style: TextStyle(fontSize: 25, color: Colors.black)),
+            style: TextStyle(fontSize: 25, color: Colors.white)),
         centerTitle: true,
       ),
       body: Column(
@@ -24,6 +26,7 @@ class HomepageView extends GetView<HomepageController> {
           Flexible(
             child: Obx(
               () => ListView.builder(
+                controller: _scrollController,
                   reverse: true,
                   itemCount: controller.messages.length,
                   itemBuilder: (BuildContext context, index) {
@@ -39,29 +42,30 @@ class HomepageView extends GetView<HomepageController> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Flexible(
-                    child: Container(
-                  height: 38,
-                  child: TextField(
-                    onSubmitted: (value) => controller.sendMessage(),
-                    controller: controller.textMessage,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        hintText: "Enter Question",
-                        contentPadding: EdgeInsets.only(left: 10)),
-                  ),
-                )),
+                    child: TextField(
+                      cursorColor: Colors.redAccent,
+                      keyboardType: TextInputType.multiline,
+                      maxLines: null,
+                      style: TextStyle(color: Colors.white),
+                      controller: controller.textMessage,
+                      decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          hintText: "Ask Question",
+                          hintStyle: TextStyle(color: Colors.white),
+                          contentPadding: EdgeInsets.only(left: 10)),
+                    )),
                 SizedBox(
                   width: 10,
                 ),
                 ElevatedButton(
                   onPressed: () {
                     controller.sendMessage();
+
                   },
                   child: Icon(
                     Icons.send,
-                    color: Colors.black,
                     size: 35,
                   ),
                   style: ElevatedButton.styleFrom(
@@ -75,7 +79,7 @@ class HomepageView extends GetView<HomepageController> {
                   },
                   child: Icon(
                     Icons.image,
-                    color: Colors.black,
+
                     size: 35,
                   ),
                   style: ElevatedButton.styleFrom(

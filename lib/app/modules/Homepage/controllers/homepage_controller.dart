@@ -4,14 +4,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:my_ai/app/modules/ChatMessage/views/chat_message_view.dart';
 
+import '../../../data/constants.dart';
+
 class HomepageController extends GetxController {
   final textMessage = TextEditingController();
-
   RxBool isTyping = false.obs;
-
-  // final String apiKey = "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"; //my Api
-
-  final String apiKey = "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"; //Arun API
 
   final RxList messages = <ChatMessageView>[].obs;
 
@@ -33,8 +30,6 @@ class HomepageController extends GetxController {
         messages.insert(0, botMessage);
       });
       textMessage.clear();
-
-
     } else {
       Get.showSnackbar(GetSnackBar(
         title: "Please Enter Data",
@@ -49,17 +44,23 @@ class HomepageController extends GetxController {
   }
 
   void generateImage() {
-
     // isTyping.value = true;
+
+    ChatMessageView message =
+        ChatMessageView(text: textMessage.text, sender: "user");
+
+    messages.insert(0, message);
     final request = GenerateImage(
       textMessage.text,
       2,
     );
 
     chatGPT!.generateImageStream(request).asBroadcastStream().listen((it) {
-      ChatMessageView botMessage =  ChatMessageView(image: it.data?.last?.url, sender: "Bot",);
+      ChatMessageView botMessage = ChatMessageView(
+        image: it.data?.last?.url,
+        sender: "Bot",
+      );
       messages.insert(0, botMessage);
-
     });
     textMessage.clear();
     // isTyping.value;
@@ -71,8 +72,8 @@ class HomepageController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    chatGPT = ChatGPT.instance.builder("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",
-          baseOption: HttpSetup(receiveTimeout: 50000));
+    chatGPT = ChatGPT.instance
+        .builder(apiKey, baseOption: HttpSetup(receiveTimeout: 50000));
   }
 
   void onDispose() {
